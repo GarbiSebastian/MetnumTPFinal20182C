@@ -4,6 +4,9 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>src/reader.h</itemPath>
+      <itemPath>src/types.h</itemPath>
+      <itemPath>src/vector_builder.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -26,6 +29,7 @@
       <itemPath>.gitignore</itemPath>
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>datos/.gitkeep</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -40,7 +44,15 @@
           <standard>11</standard>
         </ccTool>
       </compileType>
+      <item path="datos/.gitkeep" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/reader.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/vector_builder.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -64,7 +76,15 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="datos/.gitkeep" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/reader.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/vector_builder.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
