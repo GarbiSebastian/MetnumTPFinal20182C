@@ -10,8 +10,7 @@
 
 #include "types.h"
 
-const std::string vocab_path = "datos/vocab.csv";
-
+//const std::string vocab_path = "datos/vocab.csv";
 
 void read_entries(const std::string & entries_path, TokenizedEntriesMap & train_entries, TokenizedEntriesMap & test_entries) {
     /**
@@ -47,7 +46,7 @@ void read_entries(const std::string & entries_path, TokenizedEntriesMap & train_
     std::cerr << "                     " << '\r';
 }
 
-FrecuencyVocabularyMap read_vocabulary() {
+FrecuencyVocabularyMap read_vocabulary(const std::string & vocab_path) {
     /**
      *  Parsea el archivo de vocabulario
      *  El archivo en cuestión no debe tener una línea vacía al final

@@ -12,7 +12,8 @@ void build_vectorized_datasets(
         const std::string & entries_path,
         VectorizedEntriesMap & train_vectorized_entries,
         VectorizedEntriesMap & test_vectorized_entries,
-        const std::function<bool(int token, const FrecuencyVocabularyMap & vocabulary)> & filter_out) {
+        const std::function<bool(int token, const FrecuencyVocabularyMap & vocabulary)> & filter_out,
+        const std::string & vocab_path) {
     /**
      * Construye las entradas vectorizadas, filtrándolas según `filter_out`.
      * Si alguna review quedara vacía luego de filtrar esta es eliminada
@@ -21,7 +22,7 @@ void build_vectorized_datasets(
     TokenizedEntriesMap test_entries;
     read_entries(entries_path, train_entries, test_entries);
 
-    const FrecuencyVocabularyMap vocabulary = read_vocabulary();
+    const FrecuencyVocabularyMap vocabulary = read_vocabulary(vocab_path);
 
     auto filter_entries_with_vocabulary = [&vocabulary, &filter_out] (TokenizedEntriesMap & entries) {
         /**

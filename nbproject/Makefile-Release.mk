@@ -35,7 +35,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/funciones.o \
+	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/metodoPotencia.o \
+	${OBJECTDIR}/pca.o
 
 
 # C Compiler Flags
@@ -62,10 +65,25 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/metnumtpfinal20182c: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/metnumtpfinal20182c ${OBJECTFILES} ${LDLIBSOPTIONS}
 
+${OBJECTDIR}/funciones.o: funciones.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/funciones.o funciones.cpp
+
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/metodoPotencia.o: metodoPotencia.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/metodoPotencia.o metodoPotencia.cpp
+
+${OBJECTDIR}/pca.o: pca.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pca.o pca.cpp
 
 # Subprojects
 .build-subprojects:
