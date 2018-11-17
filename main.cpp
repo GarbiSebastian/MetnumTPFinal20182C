@@ -7,6 +7,8 @@
 
 #include <cstdlib>
 #include "src/vector_builder.h"
+#include "typedefs.h"
+#include "imprimir.h"
 
 using namespace std;
 
@@ -37,7 +39,6 @@ void procesarVariables(int argc, char** argv) {
     bool metodoOk=false,
          datasetPathOk=false,
          clasifOk=false;
-    
     for (int i = 1; i < argc; i+=2) {
         string val = argv[i];
         if (val == paramMetodo) {
@@ -73,8 +74,6 @@ void procesarVariables(int argc, char** argv) {
                 ;
         exit(0);
     }
-    
-
 }
 
 void prosesarDataset(int argc, char** argv) {
@@ -87,6 +86,7 @@ void prosesarDataset(int argc, char** argv) {
         double token_frecuency = vocabulary.at(token);
         return token_frecuency < frecuenciaMinima || token_frecuency > frecuenciaMaxima;
     };
+
     //std::string entries_path = "datos/imdb_tokenized.csv";
     build_vectorized_datasets(datasetPath, train_entries, test_entries, filter_out, vocab_path);
     bow_size = train_entries.begin()->second.bag_of_words.size();
@@ -102,6 +102,19 @@ void prosesarDataset(int argc, char** argv) {
 int main(int argc, char** argv) {
     procesarVariables(argc, argv);
     prosesarDataset(argc, argv);
-    
+    int componentes = bow_size;
+    int trainSize = train_entries.size();
+    int testSize = test_entries.size();
+    vectorEntero traductorIndiceTrainEntry(trainSize,0);
+    matrizReal matriz(trainSize,vectorReal(componentes,0));
+    int i=0;
+    for (auto it = train_entries.begin();it != train_entries.end();++it) {
+        traductorIndiceTrainEntry[i] = it->first;
+        for(int j = 0; j < it->second.bag_of_words.size();++j){
+            matriz[i][j] = it->second.bag_of_words[j];
+        }
+        i++;
+    }
+    imprimir(matriz);
 }
 

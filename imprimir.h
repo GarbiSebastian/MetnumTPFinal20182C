@@ -12,7 +12,7 @@ void imprimir(vector< vector< T > > &m, ostream &out) {
 	for (unsigned int i = 0; i < m.size(); i++) {
 		vector< T > v = m[i];
 		for (unsigned int j = 0; j < v.size(); j++) {
-			out << v[j] << " ";
+			out << v[j] << ";";
 		}
 		out << endl;
 	}
@@ -23,7 +23,7 @@ void imprimirUchar(vector< vector< T > > &m, ostream &out) {
 	for (unsigned int i = 0; i < m.size(); i++) {
 		vector< T > v = m[i];
 		for (unsigned int j = 0; j < v.size(); j++) {
-			out << (int) v[j] << " ";
+			out << (int) v[j] << ";";
 		}
 		out << endl;
 	}

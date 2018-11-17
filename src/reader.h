@@ -12,7 +12,10 @@
 
 //const std::string vocab_path = "datos/vocab.csv";
 
-void read_entries(const std::string & entries_path, TokenizedEntriesMap & train_entries, TokenizedEntriesMap & test_entries) {
+void read_entries(
+    const std::string & entries_path,
+    TokenizedEntriesMap & train_entries,
+    TokenizedEntriesMap & test_entries) {
     /**
      *  Parsea el archivo de reviews tokenizadas
      *  El archivo en cuestión no debe tener una línea vacía al final
