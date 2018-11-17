@@ -14,39 +14,23 @@ void A_menos_vvt(matrizReal &A, vectorReal &v, double a) {
     }
 }
 
-//matrizReal matrizCovarianzas(matrizReal &imagenes) {
-//	assert(imagenes.size() > 0);
-//	matrizReal B = centrarRespectoALaMedia(imagenes);
-//	return multiplicarPorTranspuesta(B);
-//}
-
-//void matrizCovarianzas(const matrizReal &imagenes, matrizReal& cov) {
-//	unsigned int m = imagenes.size();
-//	assert(m > 0);
-//	unsigned int n = imagenes[0].size();
-//	assert(n == cov.size() && n == cov[0].size());
-//	matrizReal B(m, vectorReal(n, 0));
-//	centrarRespectoALaMedia(imagenes, B);
-//	multiplicarPorTranspuesta(B, cov);
-//}
-
-void matrizCovarianzas(matrizReal &imagenes, matrizReal& cov, const vectorReal& medias) {
-    unsigned int m = imagenes.size();
+void matrizCovarianzas(matrizReal &entrada, matrizReal& cov, const vectorReal& medias) {
+    unsigned int m = entrada.size();
     assert(m > 0);
-    unsigned int n = imagenes[0].size();
+    unsigned int n = entrada[0].size();
     assert(n == cov.size() && n == cov[0].size());
     //matrizReal B(m, vectorReal(n, 0));
-    centrarRespectoA(imagenes, medias, m);
-    multiplicarPorTranspuesta(imagenes, cov);
+    centrarRespectoA(entrada, medias, m);
+    multiplicarPorTranspuesta(entrada, cov);
 }
 
-void matrizCovarianzasInversa(matrizReal &imagenes, matrizReal& cov, const vectorReal& medias) {
-    unsigned int m = imagenes.size();
+void matrizCovarianzasInversa(matrizReal &entrada, matrizReal& cov, const vectorReal& medias) {
+    unsigned int m = entrada.size();
     assert(m > 0);
-    unsigned int n = imagenes[0].size();
+    unsigned int n = entrada[0].size();
     assert(m == cov.size() && m == cov[0].size());
-    centrarRespectoA(imagenes, medias, m);
-    multiplicarPorTranspuestaInversa(imagenes, cov);
+    centrarRespectoA(entrada, medias, m);
+    multiplicarPorTranspuestaInversa(entrada, cov);
 }
 
 matrizReal obtenerAlfaVectores(matrizReal &A, unsigned int alfa) {

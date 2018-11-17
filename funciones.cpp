@@ -81,7 +81,7 @@ double productoInterno(const vectorReal &u, const vectorReal &v) {
     return sum;
 }
 
-void calcularMedias(const matrizReal &A, vectorReal &v) {
+void calcularMedias(matrizReal &A, vectorReal &v) {
     unsigned int m = A.size();
     unsigned int n = A[0].size();
     assert(n == v.size());

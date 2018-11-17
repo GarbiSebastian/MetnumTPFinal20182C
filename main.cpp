@@ -8,7 +8,10 @@
 #include <cstdlib>
 #include "src/vector_builder.h"
 #include "typedefs.h"
-#include "imprimir.h"
+//#include "imprimir.h"
+#include "funciones.h" 
+#include "pca.h"
+
 
 using namespace std;
 
@@ -115,6 +118,16 @@ int main(int argc, char** argv) {
         }
         i++;
     }
-    imprimir(matriz);
-}
+    switch(metodo){
+        case 0: //kNN
 
+            break;
+        case 1: //kNN + PCA
+            vectorReal medias(componentes,0);
+            calcularMedias(matriz,medias);
+            centrarRespectoA(matriz, medias, matriz.size());
+            break;
+
+    }
+
+}
