@@ -10,7 +10,9 @@
 #include "typedefs.h"
 //#include "imprimir.h"
 #include "funciones.h" 
+#include "knn.h"
 #include "pca.h"
+
 
 
 using namespace std;
@@ -24,6 +26,8 @@ const string paramFrecuencyMax = "-fa";
 const string paramK = "-k";
 const string paramAlfa = "-a";
 
+const int clases = 2; // pos neg
+
 //Parametros variables
 int metodo = -1;
 string datasetPath = "";
@@ -34,6 +38,7 @@ double frecuenciaMaxima = 0.5;
 int k = 3;
 int alfa = 0.5;
 int bow_size = 0;
+
 
 VectorizedEntriesMap train_entries;
 VectorizedEntriesMap test_entries;
@@ -99,35 +104,57 @@ void prosesarDataset(int argc, char** argv) {
             << "Tamaño del dataset de testing: " << test_entries.size() << " entradas" << std::endl;
 }
 
-/*
- * 
- */
+void llenarMatricesYVectores(matrizReal & m,vectorEntero &v, vector<bool> &c, const VectorizedEntriesMap & entriesMapita){
+    unsigned int i=0;
+    for (auto it = entriesMapita.begin();it != entriesMapita.end();++it) {
+        v[i] = it->first;
+        c[i] = it->second.is_positive;
+        for(int j = 0; j < it->second.bag_of_words.size();++j){
+            m[i][j] = it->second.bag_of_words[j];
+        }
+        i++;
+    }
+}
+
 int main(int argc, char** argv) {
+    //Parseo de entrada
     procesarVariables(argc, argv);
     prosesarDataset(argc, argv);
+    //armado de matrices
     int componentes = bow_size;
     int trainSize = train_entries.size();
     int testSize = test_entries.size();
     vectorEntero traductorIndiceTrainEntry(trainSize,0);
-    matrizReal matriz(trainSize,vectorReal(componentes,0));
-    int i=0;
-    for (auto it = train_entries.begin();it != train_entries.end();++it) {
-        traductorIndiceTrainEntry[i] = it->first;
-        for(int j = 0; j < it->second.bag_of_words.size();++j){
-            matriz[i][j] = it->second.bag_of_words[j];
-        }
-        i++;
-    }
+    vector<bool> clasesTrain(trainSize,false);
+    vector<bool> clasesTest(testSize,false);
+    vectorEntero traductorIndiceTestEntry(testSize,0);
+    matrizReal matrizTrain(trainSize,vectorReal(componentes,0));
+    matrizReal matrizTest(testSize,vectorReal(componentes,0));
+    llenarMatricesYVectores(matrizTrain,traductorIndiceTrainEntry,clasesTrain,train_entries);
+    llenarMatricesYVectores(matrizTest,traductorIndiceTestEntry,clasesTest,test_entries);
+
+    //resolución
+    vectorReal distancias;
+    vectorEntero indices;
+    vector<bool> resultados;
     switch(metodo){
         case 0: //kNN
-
+            for (unsigned int i = 0; i < matrizTest.size(); i++) {
+                buscar(k, matrizTrain, matrizTest[i], indices, distancias);
+                resultados.push_back(votar(2 , clasesTrain, indices, distancias));
+            }
+            break;
             break;
         case 1: //kNN + PCA
             vectorReal medias(componentes,0);
-            calcularMedias(matriz,medias);
-            centrarRespectoA(matriz, medias, matriz.size());
+            calcularMedias(matrizTrain,medias);
+            centrarRespectoA(matrizTrain, medias, matrizTrain.size());
             break;
 
+    }
+    
+    for(auto res = resultados.begin(); res != resultados.end();++res){
+        cout << "resultado " << ((*res)?"pos":"neg") << endl;
     }
 
 }

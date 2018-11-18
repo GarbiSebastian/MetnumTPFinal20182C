@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/funciones.o \
+	${OBJECTDIR}/knn.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/metodoPotencia.o \
 	${OBJECTDIR}/pca.o
@@ -69,6 +70,11 @@ ${OBJECTDIR}/funciones.o: funciones.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/funciones.o funciones.cpp
+
+${OBJECTDIR}/knn.o: knn.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/knn.o knn.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
