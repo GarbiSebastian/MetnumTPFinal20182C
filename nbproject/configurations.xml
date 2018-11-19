@@ -44,50 +44,6 @@
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="Debug" type="1">
-      <toolsSet>
-        <compilerSet>default</compilerSet>
-        <dependencyChecking>true</dependencyChecking>
-        <rebuildPropChanged>false</rebuildPropChanged>
-      </toolsSet>
-      <compileType>
-        <ccTool>
-          <standard>11</standard>
-        </ccTool>
-      </compileType>
-      <item path="constantes.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="datos/.gitkeep" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="funciones.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="funciones.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="imprimir.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="knn.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="knn.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="main.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="metodoPotencia.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="metodoPotencia.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="pca.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="pca.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/reader.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/types.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/vector_builder.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="typedefs.h" ex="false" tool="3" flavor2="0">
-      </item>
-    </conf>
     <conf name="Release" type="1">
       <toolsSet>
         <compilerSet>default</compilerSet>

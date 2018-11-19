@@ -177,3 +177,6 @@ pip-selfcheck.json
 datos/*.csv
 /.dep.inc
 Enunciado/tp2-metodos-numericos/
+*.csv
+*.txt
+tp

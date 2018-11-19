@@ -12,6 +12,8 @@
 #include "funciones.h" 
 #include "knn.h"
 #include "pca.h"
+#include <iostream>
+#include <fstream>
 
 
 
@@ -32,7 +34,8 @@ const int clases = 2; // pos neg
 int metodo = -1;
 string datasetPath = "";
 string vocab_path = "datos/vocab.csv";
-string clasificacion = "classif.out";
+string archivoclasificacion = "clasif.csv";
+string archivoclasificacionReal = "clasifReal.csv";
 double frecuenciaMinima = 0.1;
 double frecuenciaMaxima = 0.5;
 int k = 3;
@@ -56,7 +59,7 @@ void procesarVariables(int argc, char** argv) {
             datasetPath = argv[i+1];
             datasetPathOk=true;
         }else if (val == paramClasificacion) {
-            clasificacion = argv[i+1];
+            archivoclasificacion = argv[i+1];
             clasifOk=true;
         }else if (val == paramFrecuencyMin){
             frecuenciaMinima = atof(argv[i+1]);
@@ -121,6 +124,7 @@ int main(int argc, char** argv) {
     procesarVariables(argc, argv);
     prosesarDataset(argc, argv);
     //armado de matrices
+    cerr << "Armando matrices...";
     int componentes = bow_size;
     int trainSize = train_entries.size();
     int testSize = test_entries.size();
@@ -132,29 +136,49 @@ int main(int argc, char** argv) {
     matrizReal matrizTest(testSize,vectorReal(componentes,0));
     llenarMatricesYVectores(matrizTrain,traductorIndiceTrainEntry,clasesTrain,train_entries);
     llenarMatricesYVectores(matrizTest,traductorIndiceTestEntry,clasesTest,test_entries);
+    cerr << "                            \r";
 
     //resolución
     vectorReal distancias;
     vectorEntero indices;
     vector<bool> resultados;
+    clock_t tiempo_inicio = clock();
     switch(metodo){
         case 0: //kNN
+            cerr << "Resolviendo por kNN...";
             for (unsigned int i = 0; i < matrizTest.size(); i++) {
                 buscar(k, matrizTrain, matrizTest[i], indices, distancias);
                 resultados.push_back(votar(2 , clasesTrain, indices, distancias));
             }
             break;
-            break;
         case 1: //kNN + PCA
+            cerr << "Resolviendo por PCA + kNN...";
             vectorReal medias(componentes,0);
             calcularMedias(matrizTrain,medias);
             centrarRespectoA(matrizTrain, medias, matrizTrain.size());
             break;
-
     }
+    clock_t tiempo_fin = clock();
+    cerr << "                            \r";
     
-    for(auto res = resultados.begin(); res != resultados.end();++res){
-        cout << "resultado " << ((*res)?"pos":"neg") << endl;
+    ofstream salida;
+    salida.open(archivoclasificacion.c_str());
+    
+    ofstream salidaReal;
+    salidaReal.open("salidareal.csv");
+    
+    ofstream salidaOtrasCosas;
+    salidaOtrasCosas.open("otrasCosas.txt");
+    salidaOtrasCosas << "tiempo: " << (double)(tiempo_fin - tiempo_inicio) / CLOCKS_PER_SEC << endl;
+    
+    for(unsigned int i_salida = 0; i_salida < resultados.size(); i_salida++){
+        salida << traductorIndiceTestEntry[i_salida]; //escupo el id de la review
+        salida << ",";
+        salida << (resultados[i_salida]?"pos":"neg"); // clasificacion
+        salida << endl;
+        salidaReal << traductorIndiceTestEntry[i_salida]; //escupo el id de la review
+        salidaReal << ",";
+        salidaReal << (clasesTest[i_salida]?"pos":"neg");// clasificacion real
+        salidaReal << endl;
     }
-
 }

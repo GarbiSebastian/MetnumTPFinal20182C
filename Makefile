@@ -55,9 +55,11 @@ build: .build-post
 
 .build-pre:
 # Add your pre 'build' code here...
+	rm -rf tp
 
 .build-post: .build-impl
 # Add your post 'build' code here...
+	cp dist/Release/GNU-Linux/metnumtpfinal20182c tp
 
 
 # clean
