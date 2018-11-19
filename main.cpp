@@ -19,14 +19,18 @@
 
 using namespace std;
 
-const string paramMetodo = "-m";
-const string paramDatasetPath = "-d";
-const string paramVocabPath = "-v";
-const string paramClasificacion = "-o";
-const string paramFrecuencyMin = "-fi";
-const string paramFrecuencyMax = "-fa";
-const string paramK = "-k";
-const string paramAlfa = "-a";
+//requeridos
+const string paramMetodo            = "-m";
+const string paramDatasetPath       = "-d";
+const string paramVocabPath         = "-v";
+//opcionales
+const string paramClasificacion     = "-o";
+const string paramClasificacionReal = "-r";
+const string paramDatosExtra        = "-x";
+const string paramFrecuencyMin      = "-fi";
+const string paramFrecuencyMax      = "-fa";
+const string paramK                 = "-k";
+const string paramAlfa              = "-a";
 
 const int clases = 2; // pos neg
 
@@ -36,10 +40,11 @@ string datasetPath = "";
 string vocab_path = "datos/vocab.csv";
 string archivoclasificacion = "clasif.csv";
 string archivoclasificacionReal = "clasifReal.csv";
+string archivoDatosExtra = "extradata.txt";
 double frecuenciaMinima = 0.1;
 double frecuenciaMaxima = 0.5;
-int k = 3;
-int alfa = 0.5;
+int k_vecinos = 3;
+int alfa = 50;
 int bow_size = 0;
 
 
@@ -66,9 +71,13 @@ void procesarVariables(int argc, char** argv) {
         }else if (val == paramFrecuencyMax){
             frecuenciaMaxima = atof(argv[i+1]);
         }else if (val == paramK){
-            k = atoi(argv[i+1]);
+            k_vecinos = atoi(argv[i+1]);
         }else if (val == paramAlfa){
             alfa = atof(argv[i+1]);
+        }else if (val == paramClasificacionReal){
+            archivoclasificacionReal = argv[i+1];
+        }else if (val == paramDatosExtra){
+            archivoDatosExtra = argv[i+1];
         }
     }
     if(! (metodoOk && datasetPathOk && clasifOk )){
@@ -77,11 +86,13 @@ void procesarVariables(int argc, char** argv) {
                 << paramMetodo << " <method> "
                 << paramDatasetPath << " <dataset-path> "
                 << paramClasificacion << " <classif> "
-                << "["<< paramK << " <k de kNN>] "
+                << "["<<paramClasificacionReal << " <clasifReal>] "
+                << "["<<paramK << " <k de kNN>] "
                 << "["<<paramAlfa << " <alfa de PCA>] "
                 << "["<<paramFrecuencyMin << " <freq min aceptable>] "
                 << "["<<paramFrecuencyMax << " <freq max aceptable>] "
                 << "["<<paramVocabPath << " <archivo vocabulario>] "
+                << "["<<paramDatosExtra << " <archivo extra data>] "
                 ;
         exit(0);
     }
@@ -147,15 +158,39 @@ int main(int argc, char** argv) {
         case 0: //kNN
             cerr << "Resolviendo por kNN...";
             for (unsigned int i = 0; i < matrizTest.size(); i++) {
-                buscar(k, matrizTrain, matrizTest[i], indices, distancias);
+                cerr << "\r" << "Buscando vecinos para " << traductorIndiceTestEntry[i] << "...";
+                buscar(k_vecinos, matrizTrain, matrizTest[i], indices, distancias);
                 resultados.push_back(votar(2 , clasesTrain, indices, distancias));
             }
             break;
         case 1: //kNN + PCA
-            cerr << "Resolviendo por PCA + kNN...";
+            cerr << "\r" << "Resolviendo por PCA + kNN...             ";
+            
             vectorReal medias(componentes,0);
+            matrizReal cov(componentes,vectorReal(componentes,0));
+            
+            cerr << "\r" << "calculando medias...                     ";
             calcularMedias(matrizTrain,medias);
-            centrarRespectoA(matrizTrain, medias, matrizTrain.size());
+            cerr << "\r" << "calculando covarianzas...                ";
+            matrizCovarianzas(matrizTrain,cov,medias);//centra la matriz train y calcula cov
+            cerr << "\r" << "centrando test...                        ";
+            centrarRespectoA(matrizTest, medias, trainSize);// centro la matriz test con las medias obtenidas de train
+            
+            alfa = min(alfa,componentes);
+            cerr << "\r" << "obteniendo " << alfa << " vectores                   ";
+            matrizReal Vt;
+            obtenerAlfaVectores(cov, alfa, Vt);
+            
+            matrizReal nuevoTrain(trainSize, vectorReal(alfa, 0));
+            matrizReal nuevoTest(testSize, vectorReal(alfa, 0));
+            
+            tc(Vt, matrizTrain, nuevoTrain);
+            tc(Vt, matrizTest, nuevoTest);
+            for (unsigned int i = 0; i < nuevoTest.size(); i++) {
+                cerr << "\r" << "Buscando vecinos para " << traductorIndiceTestEntry[i] << "...";
+                buscar(k_vecinos, nuevoTrain, nuevoTest[i], indices, distancias);
+                resultados.push_back(votar(2 , clasesTrain, indices, distancias));
+            }
             break;
     }
     clock_t tiempo_fin = clock();
@@ -165,10 +200,10 @@ int main(int argc, char** argv) {
     salida.open(archivoclasificacion.c_str());
     
     ofstream salidaReal;
-    salidaReal.open("salidareal.csv");
+    salidaReal.open(archivoclasificacionReal.c_str());
     
     ofstream salidaOtrasCosas;
-    salidaOtrasCosas.open("otrasCosas.txt");
+    salidaOtrasCosas.open(archivoDatosExtra.c_str());
     salidaOtrasCosas << "tiempo: " << (double)(tiempo_fin - tiempo_inicio) / CLOCKS_PER_SEC << endl;
     
     for(unsigned int i_salida = 0; i_salida < resultados.size(); i_salida++){
