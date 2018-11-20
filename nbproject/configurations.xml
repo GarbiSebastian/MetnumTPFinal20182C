@@ -41,6 +41,8 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
     <itemPath>datos/.gitkeep</itemPath>
+    <itemPath>herramientas/foldeador.sh</itemPath>
+    <itemPath>herramientas/separarPosNeg.sh</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -72,6 +74,10 @@
       <item path="funciones.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="funciones.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="herramientas/foldeador.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="herramientas/separarPosNeg.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="imprimir.h" ex="false" tool="3" flavor2="0">
       </item>
