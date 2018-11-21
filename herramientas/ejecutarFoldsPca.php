@@ -22,8 +22,8 @@ foreach ($folds as $fold) {
     foreach ($ks as $k) {
         foreach ($alfas as $alfa) {
             foreach (range(1, $fold) as $iteracion) {
+                $dirResultado = "resultados/metodo-$metodo/knn-$k/alfa-$alfa/$fold-fold";
                 if (!file_exists("$dirResultado/clasif-$iteracion.csv")) {
-                    $dirResultado = "resultados/metodo-$metodo/knn-$k/alfa-$alfa/$fold-fold";
                     exec("mkdir -p $dirResultado");
                     $comandoKnn = "./tp"
                             . " -m $metodo"
