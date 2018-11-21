@@ -260,7 +260,7 @@ int main(int argc, char** argv) {
             << "tn: " << pos_tn << endl
             << "precision: " << precisionPos << endl
             << "recall: " << recallPos << endl
-            << "f1-score:" << f1scorePos << endl
+            << "f1-score: " << f1scorePos << endl
             << endl;
     salidaOtrasCosas
             << "Negativos" << endl
@@ -270,6 +270,6 @@ int main(int argc, char** argv) {
             << "tn: " << neg_tn << endl
             << "precision: " << precisionNeg << endl
             << "recall: " << recallNeg << endl
-            << "f1-score:" << f1scoreNeg << endl
+            << "f1-score: " << f1scoreNeg << endl
             << endl;
 }

@@ -11,13 +11,10 @@
 //const string paramFrecuencyMax      = "-fa";
 //const string paramK                 = "-k";
 //const string paramAlfa              = "-a";
-
 $folds = [2, 5, 10, 25];
-//$ks = [1, 3, 5, 11, 31, 51, 71, 91, 101, 201];
-//$ks = [71, 91, 101];
-$ks = [49, 53];
-$folds = [25];
+$k = 3;
 
+$alfas = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200];
 $metodo = 0;
 
 foreach ($ks as $k) {

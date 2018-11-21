@@ -175,6 +175,7 @@ pip-selfcheck.json
 # End of https://www.gitignore.io/api/c++,python,netbeans
 
 datos/*.csv
+resultados/metodo*
 /.dep.inc
 Enunciado/tp2-metodos-numericos/
 *.csv
