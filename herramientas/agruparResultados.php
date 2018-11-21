@@ -1,7 +1,7 @@
 <?php
 
 $folds = [2, 5, 10, 25];
-$ks = [1, 3, 5, 11, 31, 51, 71, 91, 101];
+$ks = [1, 3, 5, 11, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 61, 71, 91, 101];
 
 function calcularCasos($clasif,$real,&$res){
 	$c = fopen($clasif,'r');
