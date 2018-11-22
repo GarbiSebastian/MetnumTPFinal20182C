@@ -18,7 +18,7 @@ $ks = [35, 31, 41, 51, 1, 3, 5, 11];
 $alfas = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 $metodo = 1;
 
-foreach($ks as $k){
+foreach ($ks as $k) {
     foreach ($folds as $fold) {
         foreach ($alfas as $alfa) {
             foreach (range(1, $fold) as $iteracion) {
