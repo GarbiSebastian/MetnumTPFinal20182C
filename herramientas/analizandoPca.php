@@ -25,16 +25,17 @@ function promediar($label, $array) {
 
 $folds = [2, 5, 10, 25];
 $ks = [1, 3, 5, 11, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 61, 71, 91, 101];
+$alfas = range(10,100,10);
 
-$archivo = fopen("resultados/agrupados.csv", 'r');
+$archivo = fopen("resultados/agrupadosPca.csv", 'r');
 $datos = [];
 while ($datos[] = fgetcsv($archivo));
 fclose($archivo);
 
-$archivo = fopen("resultados/promediosK.csv", "w");
-fputcsv($archivo, ["k", "tiempo", "accuracy", "+precision", "+recall", "+f1score", "-precision", "-recall", "-f1score"]);
-foreach ($ks as $k) {
-    fputcsv($archivo, promediar($k, array_filter($datos, filtro([4 => $k, 1 => "f25"]))));
+$archivo = fopen("resultados/promediosAlfa.csv", "w");
+fputcsv($archivo, ["alfa", "tiempo", "accuracy", "+precision", "+recall", "+f1score", "-precision", "-recall", "-f1score"]);
+foreach ($alfas          as $alfa) {
+    fputcsv($archivo, promediar($alfa, array_filter($datos, filtro([4 => 35, 5 => $alfa, 1 => "f25"]))));
 }
 fclose($archivo);
 

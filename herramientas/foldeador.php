@@ -12,7 +12,7 @@ foreach ($folds as $fold) {
     foreach (range(1, $fold) as $iteracion) {
         $salida = fopen("$dir/iter-$iteracion.csv", "w");
         for ($i = 0; $i < $total; $i++) {
-            echo "$fold - $iteracion - $i".PHP_EOL;
+            echo "$fold - $iteracion - $i" . PHP_EOL;
             $csvN = fgetcsv($neg);
             $csvP = fgetcsv($pos);
             if ($i >= (($iteracion - 1) * $size) && $i < $iteracion * $size) {
