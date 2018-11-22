@@ -14,12 +14,12 @@
 
 $folds = [25, 10, 5, 2];
 //$ks = [1, 3, 5, 11, 31, 41, 49, 51, 61, 71, 91, 101];
-$ks = [31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 1, 3, 5, 11, 61, 71, 91, 101];
+$ks = [35, 31, 41, 51, 1, 3, 5, 11];
 $alfas = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 $metodo = 1;
 
-foreach ($folds as $fold) {
-    foreach ($ks as $k) {
+foreach($ks as $k){
+    foreach ($folds as $fold) {
         foreach ($alfas as $alfa) {
             foreach (range(1, $fold) as $iteracion) {
                 $dirResultado = "resultados/metodo-$metodo/knn-$k/alfa-$alfa/$fold-fold";
