@@ -13,8 +13,8 @@
 //const string paramAlfa              = "-a";
 
 $folds = [2, 5, 10, 25];
-//$ks = [1, 3, 5, 11, 31, 41, 43, 45, 47, 49, 51, 61, 71, 91, 101];
-$ks = [39, 37, 35, 33];
+$ks = [1, 3, 5, 11, 31, 41, 43, 45, 47, 49, 51, 61, 71, 91, 101];
+//$ks = [39, 37, 35, 33];
 $folds = [25];
 
 $metodo = 0;
@@ -27,11 +27,13 @@ foreach ($ks as $k) {
             $comandoKnn = "./tp"
                     . " -m $metodo"
                     . " -d datos/fold/$fold-fold/iter-$iteracion.csv"
-                    . " -o $dirResultado/clasif-$iteracion.csv"
-                    . " -r $dirResultado/real-$iteracion.csv"
+                    //. " -o $dirResultado/clasif-$iteracion.csv"
+                    . " -o /dev/null"
+//                    . " -r dirResultado/real-$iteracion.csv"
+                    . " -r /dev/null"
                     . " -k $k"
                     . " -x $dirResultado/extra-$iteracion.txt"
-//                    . " 2> /dev/null"
+                    . " 2> /dev/null"
             ;
             echo $comandoKnn . PHP_EOL;
             exec($comandoKnn);
