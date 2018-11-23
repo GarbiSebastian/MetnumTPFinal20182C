@@ -24,6 +24,7 @@ foreach ($ks as $k) {
                         $real = "$dirResultado/real-$iteracion.csv";
                         $extra = "$dirResultado/extra-$iteracion.txt";
                         if (!file_exists($extra)) {
+                            exec("touch $extra");
                             $comandoKnn = "./tp"
                                     . " -m $metodo"
                                     . " -d $dataset"
