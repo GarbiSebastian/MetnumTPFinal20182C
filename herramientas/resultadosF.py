@@ -19,8 +19,8 @@ neg_f1score = []
 for line in fileinput.input():
     lexp = line.split(",")
     if lexp[0] != "fqmin":
-        fmins.append(lexp[0]) 
-        fmaxs.append(lexp[1]) 
+        fmins.append(float(lexp[0])) 
+        fmaxs.append(float(lexp[1]))
         tams.append(int(lexp[2]))
         tiempos.append(float(lexp[3]))
         accuracys.append(float(lexp[4]))
@@ -31,11 +31,8 @@ for line in fileinput.input():
         neg_recall.append(float(lexp[9]))
         neg_f1score.append(float(lexp[10]))
         resto.append(lexp[11:])
-
-print tams
-print tiempos
-xtics=", ".join(["'"+str(tams[i])+"' "+str(i) for i in range(len(tams))])
-maxAcc = max(accuracys)
+size = len(accuracys)
+xtics=", ".join(["'"+str(tams[i])+"' "+str(i) for i in range(size)])
 
 g = Gnuplot.Gnuplot()
 g.xlabel("#palabras aceptadas")
@@ -43,79 +40,52 @@ g("set key top left")
 g("set terminal png size 1000, 500")
 g("set grid y")
 g("set grid x")
-#g("set style data histograms")
-#g("set style histogram rowstacked")
-#g("set boxwidth 0.8")
-#g("set style fill solid 1 border -1")
-#g("set xtics("+xtics+") scale 0")
-#g("set xrange [-1:"+str(len(tams))+"]")
-
-#g("set ytics 0.01 nomirror")
-#g("set yrange [0.65:0.68]")
-
-#g("xequiv=100")
-d7 = Gnuplot.Data(tams,tiempos,using="1:2",title="Tiempo",with_="linespoints")
-#d8 = Gnuplot.Data(range(len(tams)),[ maxAcc for i in range(len(tams))],using="2",title=str(round(maxAcc,6)).replace('.',','),with_="lines lt 2 lw 2")
-
-#PLOT ACCURACY
-#g("set yrange [:0.7]")
-g.ylabel("Tiempo(s)")
+d7 = Gnuplot.Data(tams,tiempos,using="1:2",title="Tiempo (seg)",with_="points")
+g.ylabel("Tiempo (seg)")
 g("set output 'tiempo-variacion-tam.png'")
 g.title("Tiempo con respecto al tamaño del vocabulario")
 g.plot(d7)
+del g
 
-"""g("set style histogram cluster gap 1")#g("set style histogram rowstacked")
+def igualFloat(valor,igual):
+    return igual-0.001 < valor and  valor < igual+0.001
+fminsSinDup = list(set(fmins))
+size2 = len(fminsSinDup)
 
-#PLOT F1SCORE
-g("set yrange [:0.74]")
-g.title("F1-score")
-g.ylabel("F1-score")
-#g("set yrange [0.5:0.8]")
-g("set output 'f1score-variacion-alfa.png'")
-g.plot(d5,d6)
-g("unset yrange")
+a = [ round(float(i)/100,2) for i in range(5,21,1)]
+b03 = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],0.3)]
+b04 = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],0.4)]
+b05 = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],0.5)]
+b06 = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],0.6)]
+b07 = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],0.7)]
+b08 = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],0.8)]
+b09 = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],0.9)]
+b1  = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],1)]
+xtics=", ".join(["'"+str(a[i]).replace(".",",")+"' "+str(i) for i in range(len(a))])
+#print a;
 
-#PLOT PRECISION
-g.title("Precision")
-g.ylabel("Precision")
-#g("set yrange [0.5:0.8]")
-#g("set ytics 0.05")
-g("set output 'precision-variacion-alfa.png'")
-dl = Gnuplot.Data(tams,[0.625 for i in range(len(tams))],using=2,with_="lines lw 2",title="0,625" )
-g.plot(d1,d2)
-g("unset yrange")
-
-#PLOT RECALL
-g.title("Recall")
-g.ylabel("Recall")
-#g("set yrange [0.4:0.9]")
-g("set output 'recall-variacion-alfa.png'")
-g.plot(d3,d4)
-g("unset yrange")
-
-
-d1 = Gnuplot.Data(tams,pos_precision,using="2", title="Precision")
-d2 = Gnuplot.Data(tams,neg_precision,using="2", title="Precision")
-d3 = Gnuplot.Data(tams,pos_recall,using="2", title="Recall" )
-d4 = Gnuplot.Data(tams,neg_recall,using="2", title="Recall" )
-d5 = Gnuplot.Data(tams,pos_f1score,using="2", title="F1-score" )
-d6 = Gnuplot.Data(tams,neg_f1score,using="2", title="F1-score" )
-
-#POSITIVAS
-g.title("Reviews Positivos")
-g.ylabel("Métricas")
-#g("set yrange [0.4:0.8]")
-g("set output 'metricas-pos-variacion-alfa.png'")
-g.plot(d1,d3,d5)
-g("unset yrange")
-
-#NEGATIVAS
-g.title("Reviews Negativos")
-g.ylabel("Métricas")
-#g("set yrange [0.5:0.9]")
-g("set output 'metricas-neg-variacion-alfa.png'")
-g.plot(d2,d4,d6)
-g("unset yrange")
-
-"""
+g = Gnuplot.Gnuplot()
+g.xlabel("freq min ")
+g("set key top right")
+g("set terminal png size 1000, 500")
+g("set style data histograms")
+g("set style histogram cluster gap 1")#g("set style histogram rowstacked")
+g("set boxwidth 1")
+g("set style fill solid 1 border 0")
+g("set xtics("+xtics+") scale 0")
+g("set xrange [-1:"+str(size2)+"]")
+g("set grid y")
+#g("set grid x")
+d1 = Gnuplot.Data(a, b03, using="2",title="frec. max=0,3")
+d2 = Gnuplot.Data(a, b04, using="2",title="frec. max=0,4")
+d3 = Gnuplot.Data(a, b05, using="2",title="frec. max=0,5")
+d4 = Gnuplot.Data(a, b06, using="2",title="frec. max=0,6")
+d5 = Gnuplot.Data(a, b07, using="2",title="frec. max=0,7")
+d6 = Gnuplot.Data(a, b08, using="2",title="frec. max=0,8")
+d7 = Gnuplot.Data(a, b09, using="2",title="frec. max=0,9")
+d8 = Gnuplot.Data(a, b1,  using="2",title="frec. max=1,0")
+g.ylabel("Accuracy")
+g("set output 'accuracy-variacion-frango.png'")
+g.title("Accuracy con respecto al rango de frecuencia de palabras")
+g.plot(d1,d2,d3,d4,d5,d6,d7,d8)
 del g

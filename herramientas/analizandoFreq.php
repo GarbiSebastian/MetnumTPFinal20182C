@@ -34,7 +34,7 @@ $folds = [2, 5, 10, 25];
 $ks = [1, 3, 5, 11, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 61, 71, 91, 101];
 $alfas = range(10, 100, 10);
 $fmins = range(0.05, 0.2, 0.01);
-$fmaxs = range(0.3, 1.1, 0.1);
+$fmaxs = range(0.3, 1, 0.1);
 
 $archivo = fopen("resultados/agrupadosFreq.csv", 'r');
 $datos = [];

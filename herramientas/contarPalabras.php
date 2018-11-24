@@ -1,7 +1,7 @@
 <?php
 
 $fmins = range(0.05, 0.2, 0.01);
-$fmaxs = range(0.3, 1.1, 0.1);
+$fmaxs = range(0.3, 1, 0.1);
 
 $arch = fopen("datos/vocab.csv", "r");
 $palabras=[];
