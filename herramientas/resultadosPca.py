@@ -119,3 +119,20 @@ g("unset yrange")
 
 
 del g
+
+g = Gnuplot.Gnuplot()
+g.xlabel("# componentes")
+g("set key top left")
+g("set terminal png size 1000, 500")
+g("set grid y")
+#g("set style data histograms")
+#g("set style histogram rowstacked")
+#g("set boxwidth 0.8")
+g("set style fill solid 1 border -1")
+g("set xtics("+xtics+") scale 0")
+g("set xrange [-1:"+str(len(alfas))+"]")
+g.title("Tiempo con respecto a la cantidad de componentes")
+g.ylabel("Tiempo (seg)")
+g("set output 'tiempo-variacion-alfa.png")
+d1 = Gnuplot.Data(alfas,tiempos,using=2, title="Tiempo",with_="linespoint")
+g.plot(d1)
