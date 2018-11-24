@@ -25,8 +25,11 @@ foreach ($folds as $fold) {
     foreach (range(1, 13) as $iteracion) {
         $dataset = "datos/fold/$fold-fold/iter-$iteracion.csv";
         foreach ($ks as $k) {
-            $archivo = "resultados/velocidad/metodo-$metodo/velocidad-k$k-f$fold-i$iteracion.txt";
+            $dir = "resultados/velocidad/metodo-$metodo";
+            exec("mkdir -p $dir");
+            $archivo = "$dir/velocidad-k$k-f$fold-i$iteracion.txt";
             if (!file_exists($archivo)) {
+//		exec("touch $archivo");
                 $comandoKnn = "./tp"
                         . " -m $metodo"
                         . " -d $dataset"
