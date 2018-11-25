@@ -22,10 +22,10 @@ $metodo = 0;
 
 foreach ($folds as $fold) {
 //    foreach (range(1, $fold) as $iteracion) {
-    foreach (range(1, 13) as $iteracion) {
+    foreach (range(1, 1) as $iteracion) {
         $dataset = "datos/fold/$fold-fold/iter-$iteracion.csv";
         foreach ($ks as $k) {
-            $dir = "resultados/velocidad/metodo-$metodo";
+            $dir = "resultados/velocidad2/metodo-$metodo";
             exec("mkdir -p $dir");
             $archivo = "$dir/velocidad-k$k-f$fold-i$iteracion.txt";
             if (!file_exists($archivo)) {
