@@ -77,7 +77,7 @@ foreach ($fmins as $min) {
                         $neg_f1 = f1score($neg_tp, $neg_fn, $neg_fp, $neg_tn);
 
                         $acc = ($pos_tp + $pos_tn) / ($pos_tp + $pos_tn + $pos_fp + $pos_fn);
-                        $salida[] = ["m$metodo", "f$fold", $min, $max, $k, $alfa, round($tiempo, 6), round($acc, 6), round($pos_pres,6), round($pos_rec,6), round($pos_f1,6), round($neg_pres,6), round($neg_rec,6), round($neg_f1,6)];
+                        $salida[] = ["m$metodo", $fold, $min, $max, $k, $alfa, round($tiempo, 6), round($acc, 6), round($pos_pres,6), round($pos_rec,6), round($pos_f1,6), round($neg_pres,6), round($neg_rec,6), round($neg_f1,6)];
                     } catch (Exception $e) {
                         
                     }

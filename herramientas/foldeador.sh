@@ -7,6 +7,7 @@ paste -d '\n' datos/neg.csv datos/pos.csv > $reordenado; #intercalo los reviews 
 total=50000;
 rm -rf datos/fold; #limpio el directiorio
 for k_fold in 2 5 10 25; do #para cada fold
+#for k_fold in 2 4 5 8 10 20 25 40 50; do #para cada fold
 	for iteracion in $(seq -s' ' 1 $k_fold); do #para cada iteracion del fold 
 		fold_dir="datos/fold/$k_fold-fold"; #directorio destino
         tam=$(($total/$k_fold)); #tamaño del fold
