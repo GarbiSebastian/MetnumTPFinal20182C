@@ -61,11 +61,14 @@ b07 = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],0.7)]
 b08 = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],0.8)]
 b09 = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],0.9)]
 b1  = [ round(accuracys[i],6) for i in range(size) if igualFloat(fmaxs[i],1)]
-xtics=", ".join(["'"+str(a[i]).replace(".",",")+"' "+str(i) for i in range(len(a))])
+xticsList = ["'"+str(a[i])+"' "+str(i) for i in range(len(a))]
+#xticsList = map((lambda x : x.replace('.',',')),xticsList)
+xtics=", ".join(xticsList)
+
 #print a;
 
 g = Gnuplot.Gnuplot()
-g.xlabel("freq min ")
+g.xlabel("frec. min ")
 g("set key top right")
 g("set terminal png size 1000, 500")
 g("set style data histograms")
@@ -76,14 +79,14 @@ g("set xtics("+xtics+") scale 0")
 g("set xrange [-1:"+str(size2)+"]")
 g("set grid y")
 #g("set grid x")
-d1 = Gnuplot.Data(a, b03, using="2",title="frec. max=0,3")
-d2 = Gnuplot.Data(a, b04, using="2",title="frec. max=0,4")
-d3 = Gnuplot.Data(a, b05, using="2",title="frec. max=0,5")
-d4 = Gnuplot.Data(a, b06, using="2",title="frec. max=0,6")
-d5 = Gnuplot.Data(a, b07, using="2",title="frec. max=0,7")
-d6 = Gnuplot.Data(a, b08, using="2",title="frec. max=0,8")
-d7 = Gnuplot.Data(a, b09, using="2",title="frec. max=0,9")
-d8 = Gnuplot.Data(a, b1,  using="2",title="frec. max=1,0")
+d1 = Gnuplot.Data(a, b03, using="2",title="frec. max=0.3")
+d2 = Gnuplot.Data(a, b04, using="2",title="frec. max=0.4")
+d3 = Gnuplot.Data(a, b05, using="2",title="frec. max=0.5")
+d4 = Gnuplot.Data(a, b06, using="2",title="frec. max=0.6")
+d5 = Gnuplot.Data(a, b07, using="2",title="frec. max=0.7")
+d6 = Gnuplot.Data(a, b08, using="2",title="frec. max=0.8")
+d7 = Gnuplot.Data(a, b09, using="2",title="frec. max=0.9")
+d8 = Gnuplot.Data(a, b1,  using="2",title="frec. max=1.0")
 g.ylabel("Accuracy")
 g("set output 'accuracy-variacion-frango.png'")
 g.title("Accuracy con respecto al rango de frecuencia de palabras")

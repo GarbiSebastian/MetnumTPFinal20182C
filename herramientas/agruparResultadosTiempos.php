@@ -9,7 +9,8 @@ $folds = [25];
 $metodo = 0;
 $min = 0.1;
 $max = 0.5;
-$maxIter = 13;
+//$maxIter = 13;
+$maxIter = 1;
 $alfa = 40;
 
 
@@ -21,15 +22,19 @@ foreach ($folds as $fold) {
     foreach ($ks as $k) {
         $tiempo = 0;
         foreach (range(1, $maxIter) as $iteracion) {
-            $archivo = "resultados/velocidad/metodo-$metodo/velocidad-k$k-f$fold-i$iteracion.txt";
+//            $archivo = "resultados/velocidad/metodo-$metodo/velocidad-k$k-f$fold-i$iteracion.txt";
+            $archivo = "resultados/velocidad2/metodo-$metodo/velocidad-k$k-f$fold-i$iteracion.txt";
             $matches = [];
             preg_match("/tiempo: (?<tiempo>\d+(\.\d+)?)/", file_get_contents($archivo), $matches);
+            if(!array_key_exists("tiempo", $matches)){
+                die("no tiene tiempo $archivo");
+            }
             $tiempo += (double) ($matches["tiempo"])/$maxIter;
         }
         $salida[] = ["m$metodo","f$fold",(string)(round($min, 2)),(string)(round($max, 2)),$k,$alfa, $tiempo];
     }
 }
-$arch = fopen("resultados/tiempos-m$metodo-variacion-k.csv", "w");
+$arch = fopen("resultados/tiempos2-m$metodo-variacion-k.csv", "w");
 foreach ($salida as $linea) {
     fputcsv($arch, $linea);
 }

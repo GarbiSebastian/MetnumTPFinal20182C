@@ -9,6 +9,7 @@ $alfas = [40];
 $ks = [35];
 $fmins = [0.05];
 $fmaxs = [0.4];
+$folds = [2, 4, 5, 8, 10, 20, 25, 40, 50];
 
 $metodo = 1;
 foreach ($ks as $k) {
@@ -16,6 +17,7 @@ foreach ($ks as $k) {
         foreach ($fmaxs as $max) {
             foreach ($folds as $fold) {
                 foreach ($alfas as $alfa) {
+//                    $dirResultado = "resultados/freqs/fmin-$min/fmax-$max/metodo-$metodo/knn-$k/alfa-$alfa/$fold-fold";
                     $dirResultado = "resultados/folds/fmin-$min/fmax-$max/metodo-$metodo/knn-$k/alfa-$alfa/$fold-fold";
                     exec("mkdir -p $dirResultado");
                     foreach (range(1, $fold) as $iteracion) {
