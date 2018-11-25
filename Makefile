@@ -87,10 +87,11 @@ all: .all-post
 
 .all-pre:
 # Add your pre 'all' code here...
+	rm -rf tp
 
 .all-post: .all-impl
 # Add your post 'all' code here...
-
+	cp dist/Release/GNU-Linux/metnumtpfinal20182c tp
 
 # build tests
 build-tests: .build-tests-post
