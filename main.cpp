@@ -197,8 +197,9 @@ int main(int argc, char** argv) {
                 buscar(k_vecinos, nuevoTrain, nuevoTest[i], indices, distancias);
                 resultados.push_back(votar(2, clasesTrain, indices, distancias));
             }
-            break;
             fin_kNN = clock();
+            break;
+            
     }
     clock_t tiempo_fin = clock();
     cerr << "                            \r";
