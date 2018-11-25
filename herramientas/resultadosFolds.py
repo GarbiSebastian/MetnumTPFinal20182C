@@ -8,6 +8,8 @@ variacion = "fold"
 resto = []
 folds= []
 tiempos = []
+tiemposPCA = []
+tiemposkNN = []
 accuracys= []
 pos_precision= []
 pos_recall = []
@@ -20,13 +22,15 @@ for line in fileinput.input():
     if lexp[0] != "metodo":
         folds.append(int(lexp[1]))
         tiempos.append(float(lexp[6]))
-        accuracys.append(float(lexp[7]))
-        pos_precision.append(float(lexp[8]))
-        pos_recall.append(float(lexp[9]))
-        pos_f1score.append(float(lexp[10]))
-        neg_precision.append(float(lexp[11]))
-        neg_recall.append(float(lexp[12]))
-        neg_f1score.append(float(lexp[13]))
+        tiemposPCA.append(float(lexp[7]))
+        tiemposkNN.append(float(lexp[8]))
+        accuracys.append(float(lexp[9]))
+        pos_precision.append(float(lexp[10]))
+        pos_recall.append(float(lexp[11]))
+        pos_f1score.append(float(lexp[12]))
+        neg_precision.append(float(lexp[13]))
+        neg_recall.append(float(lexp[14]))
+        neg_f1score.append(float(lexp[15]))
         #resto.append(lexp[9:])
 
 
@@ -41,7 +45,10 @@ print neg_recall
 print neg_f1score
 
 a=folds
-xticsList = ["'"+str(a[i])+"' "+str(i) for i in range(len(folds))]
+t = 50000
+foldtams = [(f-1)*t /f for f in folds]
+
+xticsList = ["'"+str((a[i]-1)*t/a[i])+"' "+str(i) for i in range(len(folds))]
 #xticsList = map((lambda x : x.replace('.',',')),xticsList)
 xtics=", ".join(xticsList)
 maxAcc = max(accuracys)
@@ -55,35 +62,41 @@ g("set grid y")
 #g("set style histogram rowstacked")
 g("set boxwidth 0.8")
 g("set style fill solid 1 border -1")
-g("set xtics("+xtics+") scale 0")
-g("set xrange [-1:"+str(len(folds))+"]")
+#g("set xtics("+xtics+") scale 0")
+#g("set xrange [-1:"+str(len(folds))+"]")
 g("set ytics nomirror")
 
-"""g("set y2range [0:150]")
+
+"""g("set y2range [0:]")
 g("set y2label 'Tiempo (seg)'")
 g("set y2tics 15")
 g("set grid y2")"""
 
 s = range(len(folds))
-d1 = Gnuplot.Data(s,pos_precision,using="2", title="Precisión +",with_="linespoint lw 2 ps 1.6 pt 5")
-d2 = Gnuplot.Data(s,neg_precision,using="2", title="Precisión -",with_="linespoint lw 2 ps 1.6 pt 7")
-d3 = Gnuplot.Data(s,pos_recall,using="2", title="Recall +",with_="linespoint lw 2 ps 1.3 pt 5")
-d4 = Gnuplot.Data(s,neg_recall,using="2", title="Recall -",with_="linespoint lw 2 ps 1.3 pt 7")
-d5 = Gnuplot.Data(s,pos_f1score,using="2", title="F1-score +",with_="linespoint lw 2 ps 1.5 pt 4")
-d6 = Gnuplot.Data(s,neg_f1score,using="2", title="F1-score -",with_="linespoint lw 2 ps 1.5 pt 6")
-d7 = Gnuplot.Data(s,accuracys,using="2",title="Accuracy",with_="linespoint lw 2 ps 1.5 pt 3")
-d8 = Gnuplot.Data(s,tiempos,using="2", title="Tiempo (seg)", with_="linespoints lw 2 ps 1.5 axes x1y2")
+s = foldtams
+d1 = Gnuplot.Data(s,pos_precision,using="1:2", title="Precisión +",with_="linespoint lw 2 ps 1.7 pt 5 lc rgb '#ff0000'")
+d2 = Gnuplot.Data(s,neg_precision,using="1:2", title="Precisión -",with_="linespoint lw 2 ps 1.7 pt 7 lc rgb '#00ff00'")
+d3 = Gnuplot.Data(s,pos_recall,using="1:2", title="Recall +",with_="linespoint lw 2 ps 1.3 pt 5 lc rgb '#770000'")
+d4 = Gnuplot.Data(s,neg_recall,using="1:2", title="Recall -",with_="linespoint lw 2 ps 1.3 pt 7 lc rgb '#007700'")
+d5 = Gnuplot.Data(s,pos_f1score,using="1:2", title="F1-score +",with_="linespoint lw 2 ps 1.5 pt 4 lc rgb '#aa0000'")
+d6 = Gnuplot.Data(s,neg_f1score,using="1:2", title="F1-score -",with_="linespoint lw 2 ps 1.5 pt 6 lc rgb '#00aa00'")
+d7 = Gnuplot.Data(s,accuracys,using="1:2",title="Accuracy",with_="linespoint lw 2 ps 1.5 pt 3")
+d8 = Gnuplot.Data(s,tiempos,using="1:2", title="Tiempo total(seg)", with_="linespoints lw 2 ps 1.5 axes x1y2")
+d9 = Gnuplot.Data(s,tiemposPCA,using="1:2", title="Tiempo PCA(seg)", with_="linespoints lw 2 ps 1.5 axes x1y2")
+d10 = Gnuplot.Data(s,tiemposkNN,using="1:2", title="Tiempo kNN(seg)", with_="linespoints lw 2 ps 1.5 axes x1y2")
 
 #PLOT ACCURACY
 #g("set yrange [0.7:0.73]")
-g.ylabel("Accuracy")
+#g.ylabel("Accuracy")
 g("set output 'accuracy-variacion-fold.png'")
 g.title("Variación del tamaño del train")
-g.plot(d7,d1,d3,d5,d2,d4,d6)
-#g.plot(d7,d1,d3,d5,d2,d4,d6,d8)
-#g.plot(d7,d1,d2,d3,d4,d5,d6,d8)
-#g.plot(d1)
+g.plot(d7,d1,d5,d3,d2,d6,d4)
+
+g.ylabel("Tiempo (seg)")
 g("unset yrange")
+#g("set yrange 7:]")
+g("set output 'tiempoPCA-variacion-fold.png'")
+g.plot(d9)
 
 """g("set style histogram cluster gap 1")#g("set style histogram rowstacked")
 

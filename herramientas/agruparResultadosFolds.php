@@ -1,6 +1,6 @@
 <?php
 
-$folds = [2, 5, 10, 25];
+//$folds = [2, 5, 10, 25];
 //$ks = [1, 3, 5, 11, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 61, 71, 91, 101];
 //$alfas = range(10,100,10);
 //$fmins = range(0.05, 0.2, 0.01);
@@ -11,6 +11,7 @@ $alfas = [40];
 $metodo = 1;
 $fmins = [0.05];
 $fmaxs = [0.4];
+$folds = [2, 4, 5, 8, 10, 20, 25, 40, 50];
 
 function calcularCasos($clasif, $real, &$res) {
     $c = fopen($clasif, 'r');
@@ -50,6 +51,8 @@ foreach ($fmins as $min) {
                         $dir = "resultados/folds/fmin-$min/fmax-$max/metodo-1/knn-$k/alfa-$alfa/$fold-fold";
                         echo $dir.PHP_EOL;
                         $tiempo = 0.0;
+                        $tiempoPCA = 0.0;
+                        $tiempokNN = 0.0;
                         foreach (range(1, $fold) as $iter) {
                             $clasif = "$dir/clasif-$iter.csv";
                             $real = "$dir/real-$iter.csv";
@@ -57,12 +60,27 @@ foreach ($fmins as $min) {
                             if (!file_exists($extra)) {
                                 throw new Exception("Saracatunga");
                             }
+                            /*
+                            tiempo: 58.9399
+                            tiempo PCA: 10.8922
+                            tiempo kNN: 48.0461
+                            */
+                            $contenido = file_get_contents($extra);
                             $matches = [];
-                            preg_match("/tiempo: (?<tiempo>\d+(\.\d+)?)/", file_get_contents($extra), $matches);
+                            //preg_match("/tiempo: (?<tiempo>\d+(\.\d+)?)/", $contenido, $matches);
+                            preg_match("/tiempo: (?<tiempo>\d+(\.\d+)?)".
+                                "\s*".
+                                "tiempo PCA: (?<tiempoPCA>\d+(\.\d+)?)".
+                                "\s*".
+                                "tiempo kNN: (?<tiempokNN>\d+(\.\d+)?)/", $contenido, $matches);
                             $tiempo += (double) ($matches["tiempo"]);
+                            $tiempoPCA += (double) ($matches["tiempoPCA"]);
+                            $tiempokNN += (double) ($matches["tiempokNN"]);
                             calcularCasos($clasif, $real, $res);
                         }
                         $tiempo = $tiempo / $fold;
+                        $tiempoPCA = $tiempoPCA / $fold;
+                        $tiempokNN = $tiempokNN / $fold;
                         $neg_tn = $pos_tp = $res['pos']['pos'];
                         $neg_fn = $pos_fp = $res['neg']['pos'];
                         $neg_fp = $pos_fn = $res['pos']['neg'];
@@ -77,10 +95,8 @@ foreach ($fmins as $min) {
                         $neg_f1 = f1score($neg_tp, $neg_fn, $neg_fp, $neg_tn);
 
                         $acc = ($pos_tp + $pos_tn) / ($pos_tp + $pos_tn + $pos_fp + $pos_fn);
-                        $salida[] = ["m$metodo", $fold, $min, $max, $k, $alfa, round($tiempo, 6), round($acc, 6), round($pos_pres,6), round($pos_rec,6), round($pos_f1,6), round($neg_pres,6), round($neg_rec,6), round($neg_f1,6)];
-                    } catch (Exception $e) {
-                        
-                    }
+                        $salida[] = ["m$metodo", $fold, $min, $max, $k, $alfa, round($tiempo, 6),round($tiempoPCA, 6),round($tiempokNN, 6),round($acc, 6), round($pos_pres,6), round($pos_rec,6), round($pos_f1,6), round($neg_pres,6), round($neg_rec,6), round($neg_f1,6)];
+                    } catch (Exception $e) {}
                 }
             }
         }
