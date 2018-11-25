@@ -191,13 +191,14 @@ int main(int argc, char** argv) {
             tc(Vt, matrizTrain, nuevoTrain);
             tc(Vt, matrizTest, nuevoTest);
             fin_PCA = clock();
-            
+            inicio_kNN=clock();
             for (unsigned int i = 0; i < nuevoTest.size(); i++) {
                 //cerr << "\r" << "Buscando vecinos para " << traductorIndiceTestEntry[i] << "...";
                 buscar(k_vecinos, nuevoTrain, nuevoTest[i], indices, distancias);
                 resultados.push_back(votar(2, clasesTrain, indices, distancias));
             }
             break;
+            fin_kNN=clock();
     }
     clock_t tiempo_fin = clock();
     cerr << "                            \r";
