@@ -41,10 +41,10 @@ string vocab_path = "datos/vocab.csv";
 string archivoclasificacion = "clasif.csv";
 string archivoclasificacionReal = "clasifReal.csv";
 string archivoDatosExtra = "extradata.txt";
-double frecuenciaMinima = 0.1;
-double frecuenciaMaxima = 0.5;
-int k_vecinos = 3;
-int alfa = 50;
+double frecuenciaMinima = 0.05; //0.1;
+double frecuenciaMaxima = 0.4; //0.5;
+int k_vecinos = 35; //3;
+int alfa = 40; //50;
 int bow_size = 0;
 
 
@@ -153,19 +153,19 @@ int main(int argc, char** argv) {
     vectorReal distancias;
     vectorEntero indices;
     vector<bool> resultados;
-    clock_t inicio_kNN,fin_kNN;
-    clock_t inicio_PCA,fin_PCA;
+    clock_t inicio_kNN, fin_kNN;
+    clock_t inicio_PCA, fin_PCA;
     clock_t tiempo_inicio = clock();
     switch (metodo) {
         case 0: //kNN
             cerr << "Resolviendo por kNN...";
-            inicio_kNN=clock();
+            inicio_kNN = clock();
             for (unsigned int i = 0; i < matrizTest.size(); i++) {
                 //cerr << "\r" << "Buscando vecinos para " << traductorIndiceTestEntry[i] << "...";
                 buscar(k_vecinos, matrizTrain, matrizTest[i], indices, distancias);
                 resultados.push_back(votar(2, clasesTrain, indices, distancias));
             }
-            fin_kNN=clock();
+            fin_kNN = clock();
             break;
         case 1: //kNN + PCA
             cerr << "\r" << "Resolviendo por PCA + kNN...             ";
@@ -191,14 +191,14 @@ int main(int argc, char** argv) {
             tc(Vt, matrizTrain, nuevoTrain);
             tc(Vt, matrizTest, nuevoTest);
             fin_PCA = clock();
-            inicio_kNN=clock();
+            inicio_kNN = clock();
             for (unsigned int i = 0; i < nuevoTest.size(); i++) {
                 //cerr << "\r" << "Buscando vecinos para " << traductorIndiceTestEntry[i] << "...";
                 buscar(k_vecinos, nuevoTrain, nuevoTest[i], indices, distancias);
                 resultados.push_back(votar(2, clasesTrain, indices, distancias));
             }
             break;
-            fin_kNN=clock();
+            fin_kNN = clock();
     }
     clock_t tiempo_fin = clock();
     cerr << "                            \r";
@@ -237,16 +237,16 @@ int main(int argc, char** argv) {
             << "parametros: "
             << "metodo: " << metodos[metodo] << endl
             << "dataset: " << datasetPath << endl
-            << "clasificación obtenida: " << archivoclasificacion << endl 
+            << "clasificación obtenida: " << archivoclasificacion << endl
             << "clasificación real: " << archivoclasificacionReal << endl
             << "k vecinos: " << k_vecinos << endl
             << "alfa componentes: " << alfa << endl
             << "rango frecuencia: ( " << frecuenciaMinima << " ; " << frecuenciaMaxima << " )" << endl
             << endl;
     salidaOtrasCosas << "tiempo: " << (double) (tiempo_fin - tiempo_inicio) / CLOCKS_PER_SEC << endl;
-    if(metodo==0){
+    if (metodo == 0) {
         salidaOtrasCosas << "tiempo PCA: null" << endl;
-    }else{
+    } else {
         salidaOtrasCosas << "tiempo PCA: " << (double) (fin_PCA - inicio_PCA) / CLOCKS_PER_SEC << endl;
     }
     salidaOtrasCosas << "tiempo kNN: " << (double) (fin_kNN - inicio_kNN) / CLOCKS_PER_SEC << endl;
