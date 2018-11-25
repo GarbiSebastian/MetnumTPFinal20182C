@@ -153,19 +153,23 @@ int main(int argc, char** argv) {
     vectorReal distancias;
     vectorEntero indices;
     vector<bool> resultados;
+    clock_t inicio_kNN,fin_kNN;
+    clock_t inicio_PCA,fin_PCA;
     clock_t tiempo_inicio = clock();
     switch (metodo) {
         case 0: //kNN
             cerr << "Resolviendo por kNN...";
+            inicio_kNN=clock();
             for (unsigned int i = 0; i < matrizTest.size(); i++) {
                 //cerr << "\r" << "Buscando vecinos para " << traductorIndiceTestEntry[i] << "...";
                 buscar(k_vecinos, matrizTrain, matrizTest[i], indices, distancias);
                 resultados.push_back(votar(2, clasesTrain, indices, distancias));
             }
+            fin_kNN=clock();
             break;
         case 1: //kNN + PCA
             cerr << "\r" << "Resolviendo por PCA + kNN...             ";
-
+            inicio_PCA = clock();
             vectorReal medias(componentes, 0);
             matrizReal cov(componentes, vectorReal(componentes, 0));
 
@@ -186,6 +190,8 @@ int main(int argc, char** argv) {
 
             tc(Vt, matrizTrain, nuevoTrain);
             tc(Vt, matrizTest, nuevoTest);
+            fin_PCA = clock();
+            
             for (unsigned int i = 0; i < nuevoTest.size(); i++) {
                 //cerr << "\r" << "Buscando vecinos para " << traductorIndiceTestEntry[i] << "...";
                 buscar(k_vecinos, nuevoTrain, nuevoTest[i], indices, distancias);
@@ -237,6 +243,12 @@ int main(int argc, char** argv) {
             << "rango frecuencia: ( " << frecuenciaMinima << " ; " << frecuenciaMaxima << " )" << endl
             << endl;
     salidaOtrasCosas << "tiempo: " << (double) (tiempo_fin - tiempo_inicio) / CLOCKS_PER_SEC << endl;
+    if(metodo==0){
+        salidaOtrasCosas << "tiempo PCA: null" << endl;
+    }else{
+        salidaOtrasCosas << "tiempo PCA: " << (double) (fin_PCA - inicio_PCA) / CLOCKS_PER_SEC << endl;
+    }
+    salidaOtrasCosas << "tiempo kNN: " << (double) (fin_kNN - inicio_kNN) / CLOCKS_PER_SEC << endl;
     double pos_tp = casosResultado[true][true],
             pos_fn = casosResultado[true][false],
             pos_fp = casosResultado[false][true],
